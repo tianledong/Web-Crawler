@@ -42,7 +42,7 @@ def send_recv_mes(message):
     s.close()
     return full_message
 
-
+# Login with username and password. Will return session ID and token.
 def login(username, password):
     send_list = [
         'GET /accounts/login/?next=/fakebook/ HTTP/1.1',
@@ -85,7 +85,7 @@ def login(username, password):
     session_id = mes[token_index:other_index]
     return token, session_id
 
-
+# get url from 301 header
 def get_url_301(header):
     lst = header.split('\n')
     keyword = 'Location: '
@@ -96,7 +96,7 @@ def get_url_301(header):
 
 
 def get_request(session_id, token, url):
-    # we make the host alway as webcrawler-site.ccs.neu.edu to make sure we wont go to other webs
+    # we make the host always as webcrawler-site.ccs.neu.edu to make sure we wont go to other webs
     send_list = [
         f'GET {url} HTTP/1.1',
         f'Host: {HOST}',
@@ -145,6 +145,7 @@ def find_url_in_body(body):
     body_len = len(body)
     while index < body_len:
         index = body.find('href="', index, body_len)
+        # if does not find any link end search
         if index == -1:
             return
         index += len('href="')

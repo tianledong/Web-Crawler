@@ -168,7 +168,6 @@ def crawl(token, session_id, root_url):
                 flags.append(flag)
                 # when find all flags break the loop
                 if len(flags) > 4:
-                    print('\n'.join(flags))
                     return
             find_url_in_body(body)
 
@@ -177,7 +176,7 @@ def main(args):
     # USERNAME = "dong.tia"
     # PASSWORD = "CP2VSD48LYTFHSVA"
 
-    if len(args) > 1:
+    if len(args) > 2:
         username = args[1]
         password = args[2]
     else:

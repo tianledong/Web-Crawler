@@ -42,6 +42,7 @@ def send_recv_mes(message):
     s.close()
     return full_message
 
+
 # Login with username and password. Will return session ID and token.
 def login(username, password):
     send_list = [
@@ -85,6 +86,7 @@ def login(username, password):
     session_id = mes[token_index:other_index]
     return token, session_id
 
+
 # get url from 301 header
 def get_url_301(header):
     lst = header.split('\n')
@@ -114,7 +116,7 @@ def get_request(session_id, token, url):
     elif status == '301':
         new_url = get_url_301(header)
         return get_request(session_id, token, new_url)
-        # retry the request to this url until success
+    # retry the request to this url until success
     elif status == '500':
         return get_request(session_id, token, url)
     # when status == '403' or status == '404' or other. Abandon url
@@ -174,9 +176,6 @@ def crawl(token, session_id, root_url):
 
 
 def main(args):
-    # USERNAME = "dong.tia"
-    # PASSWORD = "CP2VSD48LYTFHSVA"
-
     if len(args) > 2:
         username = args[1]
         password = args[2]

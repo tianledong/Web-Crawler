@@ -12,6 +12,7 @@ ROOT = '/fakebook/'
 FLAG_STR = "<h2 class='secret_flag'"
 
 
+# to valuate the message
 def is_full_message(message):
     if len(message) > 0:
         return message[-1] == '\n'
@@ -20,6 +21,7 @@ def is_full_message(message):
         raise SystemExit
 
 
+# send and receive message from socket. Will use new socket each time to prevent broken pipe
 def send_recv_mes(message):
     # Create socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -124,12 +126,14 @@ def get_request(session_id, token, url):
         return
 
 
+# parse to get status in header. Will return the str of status
 def get_header_status(header):
     header = header.split('\n')[0]
     status = header.split(' ')[1]
     return status
 
 
+# search for flags in body. Will return the str of flag
 def search_flag(body):
     # as the syntax of the flag exactly follow the format
     index = body.find(FLAG_STR)
@@ -142,6 +146,7 @@ def search_flag(body):
         return flag
 
 
+# find url in body. if the url is not visited and not in the stack, then will add it to stack
 def find_url_in_body(body):
     index = body.find('<div id="content">')
     body_len = len(body)
@@ -158,13 +163,15 @@ def find_url_in_body(body):
         index = back_index
 
 
+# to validate the url
 def is_valid_url(url):
     if len(url) > 9:
-        if url[0:10] == '/fakebook/':
+        if url[0:10] == ROOT:
             return True
     return False
 
 
+# crawl start with the root url
 def crawl(token, session_id, root_url):
     stack.append(root_url)
     while len(stack) > 0:

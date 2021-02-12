@@ -158,21 +158,29 @@ def find_url_in_body(body):
         index = back_index
 
 
+def is_valid_url(url):
+    if len(url) > 9:
+        if url[0:10] == '/fakebook/':
+            return True
+    return False
+
+
 def crawl(token, session_id, root_url):
     stack.append(root_url)
     while len(stack) > 0:
         url = stack.pop()
         visited_urls.append(url)
         # make a get request to get data from this url
-        body = get_request(session_id, token, url)
-        if body:
-            flag = search_flag(body)
-            if flag:
-                flags.append(flag)
-                # when find all flags break the loop
-                if len(flags) > 4:
-                    return
-            find_url_in_body(body)
+        if is_valid_url(url):
+            body = get_request(session_id, token, url)
+            if body:
+                flag = search_flag(body)
+                if flag:
+                    flags.append(flag)
+                    # when find all flags break the loop
+                    if len(flags) > 4:
+                        return
+                find_url_in_body(body)
 
 
 def main(args):
